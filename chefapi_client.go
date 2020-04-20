@@ -17,9 +17,9 @@ import (
 
 // ChefInfo contains the values specified to use for a chefapi client connection
 type chefInfo struct {
-	user string
-	keyfile string
-	chefurl string
+	user     string
+	keyfile  string
+	chefurl  string
 	certfile string
 }
 
@@ -43,14 +43,14 @@ func OrgClient(organization string) *chef.Client {
 
 	// Create a client for access
 	fmt.Printf("ORGCLIENT PATH %+v\n", u.String()) // TODO: DEBUG
-	return buildClient(flags.user, flags.keyfile, u.String() + "/")
+	return buildClient(flags.user, flags.keyfile, u.String()+"/")
 }
 
 // buildClient creates a connection to a chef server using the chef api.
 // goiardi uses port 4545 by default, chef-zero uses 8889, chef-server uses 443
 func buildClient(user string, keyfile string, baseurl string) *chef.Client {
 	// TODO: debug msg
-	fmt.Printf("KEYFILE path %+v\n",keyfile)
+	fmt.Printf("KEYFILE path %+v\n", keyfile)
 	key := clientKey(keyfile)
 	client, err := chef.NewClient(&chef.Config{
 		Name:    user,
@@ -69,7 +69,7 @@ func buildClient(user string, keyfile string, baseurl string) *chef.Client {
 
 // clientKey reads the pem file containing the credentials needed to use the chef client.
 func clientKey(filepath string) string {
-	fmt.Printf("KEY path %+v\n",filepath)
+	fmt.Printf("KEY path %+v\n", filepath)
 	key, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Couldn't read key.pem: %+v, %+v", filepath, err)
@@ -103,10 +103,10 @@ func chefCerts() *x509.CertPool {
 
 func flagInit() {
 	flags.user = os.Getenv("CHEFAPICHEFUSER")
-        flags.keyfile = os.Getenv("CHEFAPIKEYFILE")
-        flags.chefurl = os.Getenv("CHEFAPICHRURL")
-        flags.certfile = os.Getenv("CHEFAPICERTFILE")
-	fmt.Printf("flags %+v\n",flags)
+	flags.keyfile = os.Getenv("CHEFAPIKEYFILE")
+	flags.chefurl = os.Getenv("CHEFAPICHRURL")
+	flags.certfile = os.Getenv("CHEFAPICERTFILE")
+	fmt.Printf("flags %+v\n", flags)
 	if flags.user == "" || flags.keyfile == "" || flags.chefurl == "" {
 		log.Println("Env variables CHEFAPICHEFUSER, CHEFAPIKEYFILE, CHEFAPICHRURL must be set")
 	}
